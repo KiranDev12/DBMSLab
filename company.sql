@@ -1,4 +1,10 @@
+-- EMPLOYEE (SSN, Name, Address, Sex, Salary, SuperSSN, DNo)
+-- DEPARTMENT (DNo, DName, MgrSSN, MgrStartDate)
+-- DLOCATION (DNo,DLoc)
+-- PROJECT (PNo, PName, PLocation, DNo)
+-- WORKS_ON (SSN, PNo, Hours)
 
+-- SuperSSN is the foreign key to Employee itself... it denotes the manager's SSN, DO NOT ADD FOREIGN KEY CONSTRAINT OF D_NO HERE.
 create table if not exists Employee(
 	ssn varchar(35) primary key,
 	name varchar(35) not null,
@@ -10,6 +16,7 @@ create table if not exists Employee(
 	foreign key (super_ssn) references Employee(ssn) on delete set null
 );
 
+-- every department has a manager denoted by mgr_ssn
 create table if not exists Department(
 	d_no int primary key,
 	dname varchar(100) not null,
@@ -77,15 +84,16 @@ INSERT INTO WorksOn VALUES
 ("02NB254", 241563, 3),
 ("03NB653", 453723, 6);
 
+--IMPORTANT TO ADD THIS CONSTRAINT NOW
 alter table Employee add constraint foreign key (d_no) references Department(d_no) on delete cascade;
 
 -- Make a list of all project numbers for projects that involve an employee whose last name 
--- is ‘Scott’, either as a worker or as a manager of the department that controls the project. 
+-- is 'Krishna', either as a worker or as a manager of the department that controls the project. 
 select w.p_no from Employee e, WorksOn w where w.ssn=e.ssn and e.name like "%Krishna";
 
 -- how the resulting salaries if every employee working on the ‘IoT’ project is given a 10 
 -- percent raise. 
-select w.ssn,name,salary as old_salary,salary*1.1 as new_salary from WorksOn w join Employee e where w.ssn=e.ssn and w.p_no=(select p_no from Project where p_name="IOT") ;
+select w.ssn,name,salary as old_salary,salary*1.1 as new_salary from WorksOn w, Employee e where w.ssn=e.ssn and w.p_no=(select p_no from Project where p_name="IOT") ;
 
 -- Find the sum of the salaries of all employees of the ‘Accounts’ department, as well as the 
 -- maximum salary, the minimum salary, and the average salary in this department 
@@ -99,10 +107,9 @@ select Employee.ssn,name,d_no from Employee where not exists
     (select p_no from Project p where p.d_no=1 and p_no not in
     	(select p_no from WorksOn w where w.ssn=Employee.ssn));
 
--- For each department that has more than five employees, retrieve the department 
--- number and the number of its employees who are making more than Rs. 6,00,000.
+-- For each department that has more than five employees, retrieve the department number and the number of its employees who are making more than Rs. 6,00,000.
 
-select d.d_no, count(*) from Department d join Employee e on e.d_no=d.d_no where salary>600000 group by d.d_no having count(*) >1;
+select d.d_no, count(*) from Department d, Employee e where e.d_no=d.d_no and salary>600000 group by d.d_no having count(*) >1;
 
 -- Create a view that shows name, dept name and location of all employees
 create view names as 

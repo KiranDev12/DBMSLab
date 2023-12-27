@@ -80,10 +80,9 @@ where per.driver_id=p.driver_id and p.report_no=a.report_no and a.accident_date>
 
 -- Find the number of accidents in which the cars belonging to “Smith” were involved. 
 SELECT COUNT(DISTINCT a.report_no)
-FROM accident a
-JOIN participated ptd ON a.report_no = ptd.report_no
-JOIN person p ON p.driver_id = ptd.driver_id
-WHERE p.driver_name = "Smith";
+FROM accident a, participated ptd, person p
+where a.report_no = ptd.report_no and p.driver_id = ptd.driver_id 
+and p.driver_name = "Smith";
 
 -- Add a new accident to the database; assume any values for required attributes.
 insert into accident values(45562, "2024-04-05", "Mandya");

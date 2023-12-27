@@ -87,14 +87,19 @@ where s.sid=r.sid and b.bid=r.bid and s.rating=9.5;
 
 
 -- A trigger that prevents boats from being deleted If they have active reservations.
+
 DELIMITER //
-create or replace trigger CheckAndDelete
-before delete on boat
-for each row
+
+CREATE TRIGGER CheckAndDelete
+BEFORE DELETE ON boat
+FOR EACH ROW
 BEGIN
-	IF EXISTS (select * from reserves where reserves.bid=old.bid) THEN
-		SIGNAL SQLSTATE '45000' SET message_text='Boat is reserved and hence cannot be deleted';
-	END IF;
-END;//
+    IF EXISTS (SELECT * FROM reserves WHERE reserves.bid = old.bid) THEN
+        SIGNAL SQLSTATE '45001'
+        SET MESSAGE_TEXT = 'Boat is reserved and cannot be deleted';
+    END IF;
+END;
+
+//
 
 DELIMITER ;

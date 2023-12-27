@@ -87,15 +87,12 @@ insert into BookAdoption values(001, 7, 747218);
 -- Produce a list of text books (include Course #, Book-ISBN, Book-title) in the alphabetical 
 -- order for courses offered by the ‘CS’ department that use more than two books.
 SELECT c.course,t.bookIsbn,t.book_title
-     FROM Course c,BookAdoption ba,TextBook t
-     WHERE c.course=ba.course
-     AND ba.bookIsbn=t.bookIsbn
-     AND c.dept='CS'
-     AND 2<(
-     SELECT COUNT(bookIsbn)
-     FROM BookAdoption b
-     WHERE c.course=b.course)
-     ORDER BY t.book_title;
+FROM Course c,BookAdoption ba,TextBook t
+WHERE c.course=ba.course AND ba.bookIsbn=t.bookIsbn
+AND c.dept='CS'
+AND ( SELECT COUNT(bookIsbn) FROM BookAdoption b
+WHERE c.course=b.course) > 2
+ORDER BY t.book_title;
 
 
 -- List any department that has all its adopted books published by a specific publisher.
