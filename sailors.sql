@@ -60,8 +60,8 @@ where reserves.bid=103);
 select s.sname
 from sailors s
 where s.sid not in 
-(select s1.sid from sailors s1, reserves r1 where r1.sid=s1.sid and s1.sname like "%storm%")
-and s.sname like "%storm%"
+(select s1.sid from sailors s1, reserves r1 where r1.sid=s1.sid and s1.sname like "%storm%") --this comparison of name is for excluding sailors with name storm
+and s.sname like "%storm%" -- this for inclusion
 order by s.name ASC;
 
 --Find the name of the sailors who have reserved all boats

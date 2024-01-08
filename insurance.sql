@@ -6,19 +6,19 @@
 CREATE TABLE IF NOT EXISTS person (
 driver_id VARCHAR(255) primary key,
 driver_name TEXT NOT NULL,
-address TEXT NOT NULL,
+address TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS car (
 reg_no VARCHAR(255) primary key,
 model TEXT NOT NULL,
-c_year INTEGER,
+c_year INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS accident (
 report_no INTEGER primary key,
 accident_date DATE,
-location TEXT,
+location TEXT
 );
 
 CREATE TABLE IF NOT EXISTS owns (
@@ -51,7 +51,7 @@ INSERT INTO car VALUES
 ("KA-21-AC-5473", "Alto", 2015),
 ("KA-21-BD-4728", "Triber", 2019),
 ("KA-09-MA-1234", "Tiago", 2018);
-
+    
 INSERT INTO accident VALUES
 (43627, "2020-04-05", "Nazarbad, Mysuru"),
 (56345, "2019-12-16", "Gokulam, Mysuru"),

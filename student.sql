@@ -90,7 +90,7 @@ SELECT c.course,t.bookIsbn,t.book_title
 FROM Course c,BookAdoption ba,TextBook t
 WHERE c.course=ba.course AND ba.bookIsbn=t.bookIsbn
 AND c.dept='CS'
-AND ( SELECT COUNT(bookIsbn) FROM BookAdoption b
+AND (SELECT COUNT(bookIsbn) FROM BookAdoption b
 WHERE c.course=b.course) > 2
 ORDER BY t.book_title;
 
@@ -113,7 +113,7 @@ SELECT DISTINCT c.dept
 
 -- List the students who have scored maximum marks in ‘DBMS’ course.
 select name from Student s, Enroll e, Course c
-where s.regno=e.regno and e.course=c.course and c.cname="DBMS" and e.marks in 
+where s.regno=e.regno and e.course=c.course and e.marks = 
 (select max(marks) from Enroll e1, Course c1 where c1.cname="DBMS" and c1.course=e1.course);
 
 
